@@ -43,10 +43,10 @@ services:
     ports:
       - 3306:3306
     restart: unless-stopped
-    volumes:
-      - data:/var/lib/mysql
+    # volumes:
+    #   - data:/var/lib/mysql
     container_name: mvw_db
 
-volumes:
-  data:
-    driver: "local"
+# volumes:
+#   data:
+#     driver: "local"
