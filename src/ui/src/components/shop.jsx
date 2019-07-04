@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-// import ShirtService from "../ShirtService";
-import axios from 'axios'
+import ShirtService from "../ShirtService";
+// import axios from 'axios'
 
 class Shop extends Component {
 
@@ -22,33 +22,31 @@ class Shop extends Component {
     };
 
     loadedShirt = (response) => {
-        this.setState({loading: false, shirt: response.data});
-        console.log("This ran!!.........");
-        // if (response.status === 200) {
-        //     this.setState({loading: false, shirt: response.data});
-        //     console.log("This ran!!.........");
-        // } else {
-        //     this.setState({loading: false, errorMessage: 'There was an error loading your account.'});
-        // }
+        // this.setState({loading: false, shirt: response.data});
+        // console.log("This ran!!.........");
+        if (response.status === 200) {
+            this.setState({loading: false, shirt: response.data});
+            console.log("This ran!!.........");
+        } else {
+            this.setState({loading: false, errorMessage: 'There was an error loading your account.'});
+        }
     };
 
     errorLoading = (err) => {
         this.setState({loading: false, errorMessage: 'There was an error loading your account.'});
     };
 
-    // componentDidMount() {
-    //     const data = ShirtService.getShirts();
-    //     console.log(data);
-    //     this.loadedShirt(data);
-    // }
-
     componentDidMount() {
-        axios.get('/shirts')
-        .then(res => {
-            console.log(res);
-            this.setState({shirt: res.data});
-        });
+        ShirtService.getShirts(this.loadedShirt, this.errorLoading);
     }
+
+    // componentDidMount() {
+    //     axios.get('/shirts')
+    //     .then(res => {
+    //         console.log("This is from the shop component: " + res);
+    //         this.setState({shirt: res.data});
+    //     });
+    // }
 
     render() {
         const items = this.state.shirt.map((item, key) =>

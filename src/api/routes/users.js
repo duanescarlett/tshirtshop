@@ -48,18 +48,18 @@ router.get('/me', ValidateJWT, (req, res, next) => {
     }).catch(err => next(err));
 });
 
-router.get('/shop', ValidateJWT, (req, res, next) => {
-    // User.findOne({where: {id: req.userId}}).then(user => {
-    //     res.json({username: user.username, createdAt: user.created_at});
-    // }).catch(err => next(err));
-    const id = req.userId;
-    Tshirt.findAll({
-        attributes: ['image']
-    }).then(shirt => {
-        console.log(shirt);
-        res.json({shirt: shirt.image});
-    }).catch(err => next(err));
-});
+// router.get('/shop', ValidateJWT, (req, res, next) => {
+//     // User.findOne({where: {id: req.userId}}).then(user => {
+//     //     res.json({username: user.username, createdAt: user.created_at});
+//     // }).catch(err => next(err));
+//     const id = req.userId;
+//     Tshirt.findAll({
+//         attributes: ['image']
+//     }).then(shirt => {
+//         console.log(shirt);
+//         res.json({shirt: shirt.image});
+//     }).catch(err => next(err));
+// });
 
 router.get('/home', ValidateJWT, (req, res, next) => {
     User.findOne({where: {id: req.userId}}).then(user => {

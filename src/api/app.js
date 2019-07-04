@@ -9,7 +9,13 @@ const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({
+    extended: false
+}));
+
+app.get('/', function (req, res) {
+    res.send('hello world')
+})
 
 app.use('/users', usersRouter);
 app.use('/shirts', shirtsRouter);
@@ -20,7 +26,9 @@ app.use(function (req, res, next) {
 
 app.use(function (err, req, res, next) {
     res.status(err.status || 500);
-    res.send({message: err.message})
+    res.send({
+        message: err.message
+    })
 });
 
 app.listen(8000);
