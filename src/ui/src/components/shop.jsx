@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import {Route} from "react-router-dom";
+// import {Route} from "react-router-dom";
 import ShirtService from "../ShirtService";
+// import Product from "product";
 // import axios from 'axios'
 
 class Shop extends Component {
@@ -88,7 +89,7 @@ class Shop extends Component {
             <div class="row">
               {this.state.shirt.map((item, key) => (
                 <div class="col-sm" key={item.product_id}>
-                  <Route path={'/shirts/'+ item.product_id} exact="true" component={product}>
+                  {/* <Route path={'/shirts/'+ item.product_id} exact="true" component=""> */}
                     <img
                       src={"https://raw.githubusercontent.com/zandoan/turing-fullstack/master/Images/product_images/" + item.image}
                       alt=""
@@ -96,7 +97,7 @@ class Shop extends Component {
                     <h6>{item.name}</h6>
                     <p>{item.price}</p>
                     <code>{item.description}</code>
-                  </Route>
+                  {/* </Route> */}
                 </div>
                 
               ))}
