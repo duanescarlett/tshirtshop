@@ -10,7 +10,14 @@ router.get('/', ValidateJWT, (req, res, next) => {
     // }).catch(err => next(err));
     const id = req.userId;
     Tshirt.findAll({
-        attributes: ['image', 'product_id'],
+        attributes: [
+            'image',
+            'product_id',
+            'name',
+            'price',
+            'discounted_price',
+            'description'
+        ],
         limit: 10
     }).then(shirt => {
         // console.log(shirt);
@@ -18,15 +25,18 @@ router.get('/', ValidateJWT, (req, res, next) => {
     }).catch(err => next(err));
 });
 
-module.exports = router;
+router.get('/:product_id', ValidateJWT, (req, res, next) => {
 
-// db.Todo.find()
-//     .then(function(todos){
-//         res.json(todos);
-//         throw new Error('oh, no!');
-//     })
-//     .catch(function(err){
-//         res.send(err);
-//         res.statusCode = 500
-//         res.end(err.message)
-//     });
+    Tshirt.findAll({
+        where: {
+            product_id: req.params.product_id
+        }
+    })
+    .then(product => {
+        res.json(product);
+    })
+    .catch(err => next(err));
+
+});
+
+module.exports = router;

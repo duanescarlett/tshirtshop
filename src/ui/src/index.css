@@ -5,7 +5,10 @@ body {
   min-height: 100%;
 }
 
-.content {
+.content {}
+
+.hidden {
+  display: hidden;
 }
 
 html {
@@ -19,12 +22,13 @@ html {
   display: inline;
   margin: 0;
   padding: 0;
-  color:  #0000EE;
+  color: #0000EE;
 }
 
 .overlay {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color:rgba(50,50,50,0.5);;
+  background-color: rgba(50, 50, 50, 0.5);
+  ;
 }
