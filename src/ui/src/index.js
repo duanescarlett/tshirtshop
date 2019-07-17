@@ -1,7 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import {HashRouter} from "react-router-dom";
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { BrowserRouter } from 'react-router-dom'
+import { Provider } from 'react-redux'
 
-ReactDOM.render(<HashRouter><App/></HashRouter>, document.getElementById('root'));
+import './index.css'
+import App from './App'
+import Store from './config/store'
+
+const app = <Provider store={Store}>
+    <BrowserRouter>
+        <App />
+    </BrowserRouter>
+</Provider>
+
+ReactDOM.render(app, document.getElementById('root'));

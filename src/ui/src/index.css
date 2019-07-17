@@ -1,11 +1,22 @@
+*{
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: sans-serif;
   height: 100%;
   min-height: 100%;
+  width: 100%;
+  background-color: rgb(221, 248, 255);
 }
 
-.content {}
+.page-container {
+  width: 800px;
+  margin: 10px auto;
+  background-color: #fff;
+  padding: 15px;
+}
 
 .hidden {
   display: hidden;
@@ -31,4 +42,16 @@ html {
   height: 100%;
   background-color: rgba(50, 50, 50, 0.5);
   ;
+}
+
+.product-listing {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.product-listing .product-list-item {
+  padding: 10px 30px;
+  width: 200px;
 }

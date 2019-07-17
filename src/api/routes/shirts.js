@@ -3,7 +3,7 @@ const router = express.Router();
 const Tshirt = require('../db/model/T-Shirts');
 const ValidateJWT = require('../auth/ValidateJWT');
 
-router.get('/', ValidateJWT, (req, res, next) => {
+router.get('/', (req, res, next) => {
     // User.findOne({where: {id: req.userId}}).then(user => {
     //     console.log("Fire ------------------------!");
     //     res.json({username: user.username, createdAt: user.created_at});
@@ -18,14 +18,14 @@ router.get('/', ValidateJWT, (req, res, next) => {
             'discounted_price',
             'description'
         ],
-        limit: 10
+        limit: 100
     }).then(shirt => {
         // console.log(shirt);
         res.json(shirt);
     }).catch(err => next(err));
 });
 
-router.get('/:product_id', ValidateJWT, (req, res, next) => {
+router.get('/:product_id', (req, res, next) => {
 
     Tshirt.findAll({
         where: {

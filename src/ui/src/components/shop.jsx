@@ -1,19 +1,19 @@
 import React, { Component } from "react";
-// import {Route} from "react-router-dom";
 import ShirtService from "../ShirtService";
-// import Product from "product";
-// import axios from 'axios'
 
 class Shop extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
+      cart: false,
+      itemId: null,
       errorMessage: undefined,
       shirt: [],
       products: [],
       filterdProducts: []
     };
+    this.stateUpdate = null;
   }
 
   getCreatedDateString = createdTimestamp => {
@@ -49,66 +49,73 @@ class Shop extends Component {
     ShirtService.getShirts(this.loadedShirt, this.errorLoading);
   }
 
-  // componentDidMount() {
-  //     axios.get('/shirts')
-  //     .then(res => {
-  //         console.log("This is from the shop component: " + res);
-  //         this.setState({shirt: res.data});
-  //     });
-  // }
+  trigger(id){
+    this.stateUpdate = id;
+    // this.setState((state) => ({
+    //   itemId: state.itemId = this.stateUpdate
+    // }))
+  }
+
+  backToStore(){
+    this.updater = null;
+  }
+
+  shop(){
+    return (
+      <div className="h-100 d-flex align-items-center justify-content-center">
+        <div class="container">
+          <div class="row">
+            
+            {this.state.shirt.map((item, key) => (
+              <div class="col-sm" key={item.product_id}>
+                {/* <a href="*" onClick={this.setState.itemId = item.product_id}> */}
+                <a href="/" onClick={
+                  e => {
+                    e.preventDefault();
+                    this.trigger(item.product_id)
+                  }
+                  
+                }>
+                  <img
+                    src={
+                      "https://raw.githubusercontent.com/zandoan/turing-fullstack/master/Images/product_images/" +
+                      item.image
+                    }
+                    alt=""
+                  />
+                  <h6>{item.name}</h6>
+                  <p>{item.price}</p>
+                  <code>{item.description}</code>
+                </a>
+              </div>
+            ))}
+          
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  cart(){
+    return(
+      <div>
+        <h2>This is the shipping cart</h2>
+        <button onClick={this.backToStore()}>
+          <h1>Return to Store</h1>
+        </button>
+      </div>
+    );
+  }
 
   render() {
-    // const items = this.state.shirt.map((item, key) => (
-    //   <li key={item.product_id}>{item.image}</li>
-    // ));
-    // var i = '';
-
-    if (this.state.loading) {
-      return (
-        <div className="d-flex align-items-center justify-content-center overlay">
-          <div className="spinner-border text-primary" role="status" />
-        </div>
-      );
-    } else {
-      return this.state.errorMessage ? (
-        <div className="h-100 d-flex align-items-center justify-content-center text-danger">
-          {this.state.errorMessage}
-        </div>
-      ) : (
-        <div className="h-100 d-flex align-items-center justify-content-center">
-          {/* Hello, {this.state.user.username}! */}
-
-          {/* <p>
-            {
-              // this.state.shirt.image
-              items
-            }
-          </p> */}
-          {/* since {this.getCreatedDateString(this.state.user.createdAt)}! */}
-          <div class="container">
-            <div class="row">
-              {this.state.shirt.map((item, key) => (
-                <div class="col-sm" key={item.product_id}>
-                  {/* <Route path={'/shirts/'+ item.product_id} exact="true" component=""> */}
-                    <img
-                      src={"https://raw.githubusercontent.com/zandoan/turing-fullstack/master/Images/product_images/" + item.image}
-                      alt=""
-                    />
-                    <h6>{item.name}</h6>
-                    <p>{item.price}</p>
-                    <code>{item.description}</code>
-                  {/* </Route> */}
-                </div>
-                
-              ))}
-            </div>
-          </div>
-
-          {/* <Products products={} handleAddToCart={} /> */}
-        </div>
-      );
+    if(!this.stateUpdate){
+      return(this.shop());
+    }
+    else {
+      return(this.cart());
     }
   }
+  
 }
 
 export default Shop;
