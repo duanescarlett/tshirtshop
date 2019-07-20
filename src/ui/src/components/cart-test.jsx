@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import ShirtService from "../ShirtService";
 
-class Home extends Component {
+class CartTest extends Component {
 
     constructor(props) {
         super(props);
@@ -47,13 +47,11 @@ class Home extends Component {
     };
 
     componentDidMount() {
-        ShirtService.getShirts(this.loadedShirt, this.errorLoading);
-    }
-
-    trigger(id){
-        // this.setState({
-        //     itemId: id
-        // });
+        const { match: { params } } = this.props;
+        var shirt = ShirtService.getItemForCart(params.id);
+        this.setState({
+            shirt: shirt
+        })
     }
 
     render() {
@@ -61,7 +59,8 @@ class Home extends Component {
             <div className="h-100 d-flex align-items-center justify-content-center">
                 <div class="container">
                     <div class="row">
-                    {this.state.shirt.map((item, key) => (
+                        {this.state.shirt}
+                    {/* {this.state.shirt.map((item, key) => (
                         <div class="col-sm" key={item.product_id}>
                             <a href={"/cart/" + item.product_id}>
                             
@@ -79,7 +78,7 @@ class Home extends Component {
                             <code>{item.description}</code>
                             </a>
                         </div>
-                        ))}
+                        ))} */}
                     </div>
                 </div>
             </div>
@@ -88,4 +87,4 @@ class Home extends Component {
 
 }
 
-export default Home;
+export default CartTest;

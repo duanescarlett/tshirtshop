@@ -33,6 +33,7 @@ router.get('/:product_id', (req, res, next) => {
         }
     })
     .then(product => {
+        console.log("This is from the api shirts route " + product)
         res.json(product);
     })
     .catch(err => next(err));

@@ -13,7 +13,6 @@ class Shop extends Component {
       products: [],
       filterdProducts: []
     };
-    this.stateUpdate = null;
   }
 
   getCreatedDateString = createdTimestamp => {
@@ -25,8 +24,6 @@ class Shop extends Component {
   };
 
   loadedShirt = response => {
-    // this.setState({loading: false, shirt: response.data});
-    // console.log("This ran!!.........");
     if (response.status === 200) {
       this.setState({ loading: false, shirt: response.data });
       console.log("This ran!!.........");
