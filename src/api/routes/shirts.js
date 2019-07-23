@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Tshirt = require('../db/model/T-Shirts');
-const ValidateJWT = require('../auth/ValidateJWT');
 
 router.get('/', (req, res, next) => {
     // User.findOne({where: {id: req.userId}}).then(user => {
@@ -36,7 +35,7 @@ router.get('/:product_id', (req, res, next) => {
         console.log("This is from the api shirts route " + product)
         res.json(product);
     })
-    .catch(err => next(err));
+    .catch(err => next(err.message));
 
 });
 

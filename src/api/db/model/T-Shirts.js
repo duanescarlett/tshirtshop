@@ -38,7 +38,7 @@ var Tshirt = connection.Sequelize.define('shirt', {
         type: Sequelize.BIGINT(6)
     }
 }, {
-    timestamps: true,
+    timestamps: false,
     freezeTableName: true,
     tableName: 'product'
 });

@@ -10,15 +10,17 @@ class ShirtService {
     }
 
     static getItemForCart(id) {
+        // var obj = "null"
         axios.get('/shirts/' + id)
         .then(res => {
-            if (res.status === 200) {
-                console.log("This ran!!.........")
-                return res.data
-            } 
+            // if (res.status === 200) {
+            //     // console.log(JSON.stringify(res.data) + " This ran!!.........")
+            //     return JSON.stringify(res.data)
+            // } 
+            return JSON.stringify(res.data)
         })
         .catch(e => {
-            console.log(e + " and this happened")
+            console.log(e.message + " and this happened")
         })
     }
 }

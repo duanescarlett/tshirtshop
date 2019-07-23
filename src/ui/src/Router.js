@@ -1,13 +1,13 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import Home from './components/home'
-// import Cart from './components/cart'
-import CartTest from './components/cart-test'
+import Cart from './components/cart'
+
 
 const Router = () => (
     <Switch>
         {/* <Route exact path='/' component={Home} /> */}
-        <Route exact path='/cart/:id' component={CartTest} />
+        <Route exact path='/cart/:id' component={Cart} />
         <Route 
             exact 
             path='/'
@@ -19,7 +19,7 @@ const Router = () => (
             exact 
             path='/cart'
             render={(props) => (
-                <CartTest {...props} />
+                <Cart {...props} />
             )} />
 
     </Switch>
