@@ -55,3 +55,33 @@ html {
   padding: 10px 30px;
   width: 200px;
 }
+
+.row80{
+  border-color: blue;
+  border-width: 3px;
+  border-style: solid;
+  width: 80%;
+}
+
+.row20{
+  border-color: black;
+  border-width: 3px;
+  border-style: solid;
+  width: 15%;
+  float: right;
+  min-height: 300px;
+  clear: both;
+}
+
+.itemRow{
+  margin:10px;
+  border-color: whitesmoke;
+  border-width: 5px;
+  border-style: solid;
+}
+
+.cart{
+  min-height: 500px;
+  height: 800px;
+  padding: 10px;
+}

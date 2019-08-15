@@ -1,43 +1,37 @@
 import React, {Component} from 'react'
-import axios from 'axios'
-// import ShirtService from "../ShirtService";
 
-class CartTest extends Component {
+class Cart extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            loading: this.props.loading,
-            cart: false,
-            itemId: this.props.itemId,
-            errorMessage: undefined,
-            shirt: [],
-            products: [],
-            filterdProducts: [],
-            count: 1,
-            price: 0
-        }
 
         this.styles = {
             fontWeight: 'bold',
             fontSize: 10
         }
 
-        this.price = {
-            price: 0
-        }
+        this.price = 0
 
+        this.checkout = false
     }
 
+    // price = {
+    //     price: 0
+    // }
+
+    // price = p => {
+
+    // }
+
+
     formatCount(){
-        // return this.state.count === 0 ? 'Zero' : this.state.count;
         const { count } = this.state
         return count === 0 ? "Zero" : count;
     }
 
     formatCost(price){
-        this.price.price = price
-        this.price.price = this.price.price * this.state.count
+        this.price = price
+        this.price = this.price * this.props.count
     }
     
     getCreatedDateString = createdTimestamp => {
@@ -45,112 +39,108 @@ class CartTest extends Component {
             day: "numeric",
             month: "short",
             year: "numeric"
-        });
-    };
+        })
+    }
 
-    loadedShirt = response => {
-    // this.setState({loading: false, shirt: response.data});
-    // console.log("This ran!!.........");
-        if (response.status === 200) {
-            this.setState({ loading: false, shirt: response.data });
-            console.log("This ran!!.........");
-        } 
-        else {
-            this.setState({
-            loading: false,
-            errorMessage: "There was an error loading your account."
-            });
-        }
-    };
+    removeFromCart = (i, e) => {
+        e.preventDefault()
+        this.props.domCart.pop(i)
+        console.log("Removed from cart " + this.props.domCart.cart)
+        this.props.pageChange("cart")
+    }
 
-    errorLoading = err => {
-        this.setState({
-            loading: false,
-            errorMessage: "There was an error loading your account."
-        });
-    };
+    // cost = (amt) => {
+    //     this.props.cost(amt)
+    //     console.log("This is the total cost: => " + this.props.costAmt)
+    //     // this.props.pageChange("cart")
+    // }
+
+    stripeCheckout = (e) => {
+        // e.stopPropagation()
+        e.preventDefault()
+        this.props.pageChange("checkout")
+    }
 
     componentDidMount() {
-        const { match: { params } } = this.props;
-        // var shirt = ShirtService.getItemForCart(this.loadedShirt, this.errorLoading, params.id);
-        // var shirt = ShirtService.getItemForCart(params.id);
-        axios.get('/shirts/' + params.id)
-        .then(res => {
-            this.setState({
-                shirt: res.data
-            })
-        })
-        .catch(e => {
-            console.log(e.message + " and this happened")
-        })
+        // console.log("this is the cart " + JSON.stringify(this.props.domCart))
     }
 
     render() {
-
+        let ar = this.props.domCart
+        let total = 0
         return (
+
+            <React.Fragment>
+            <div>
+                {ar.forEach(function(val, i, a){
+                    // console.log(val, i, a)
+                    console.log(val)
+                    total += parseFloat(val.price) - parseFloat(val.discounted_price)
+                })}
+            </div>
             <div className="h-100 d-flex align-items-center justify-content-center">
-                <div class="container">
-                    <div class="row">
-                        {/* {this.state.shirt} */}
-
-                        {this.state.shirt.map((item, key) => (
-                        <div class="col-sm" key={item.product_id}>
-                            <a href={"/cart/" + item.product_id}>
-                            
-                            <img
-                                src={
-                                "https://raw.githubusercontent.com/zandoan/turing-fullstack/master/Images/product_images/" +
-                                item.image
-                                }
-                                alt=""
-                                width="100"
-                                height="100"
-                            />
-                            <h6>{item.name}</h6>
-                            <p>{item.price}</p>
-                            {this.formatCost(item.price)}
-                            
-                            <code>{item.description}</code>
-                            </a>
-                        </div>
-                        ))}
-
-                        <div>
-                            <span style={ this.styles } className={this.getBadgeClasses()}>{this.formatCount()}</span>
-                            <button onClick={this.handleIncrement} className="btn btn-secondary btn-sma">+</button>
-                            <button onClick={this.handleDecrement} className="btn btn-secondary btn-sma">-</button>
-                        </div>
-                        <div>
-                            { this.price.price }
-                        </div>
-                        <div>
-                        <button className="btn btn-secondary btn-sma">Buy Now</button>
-                        </div>
+                <div className="container">
+                    <div className="row">
+                        <div className="col-8">
+                            {this.props.domCart.map((item, index) => (
+                                <div className="itemRow">
+                                    <div className="col-sm" key={item.product_id}>
+                                        <a href={"/cart/" + item.product_id}>
+                                            <img
+                                                src={
+                                                "https://raw.githubusercontent.com/zandoan/turing-fullstack/master/Images/product_images/" +
+                                                item.image
+                                                }
+                                                alt=""
+                                                width="100"
+                                                height="100"
+                                            />
+                                            <h6>{item.name}</h6>
+                                            <p>{item.price}</p>
+                                            {this.formatCost(item.price)}
+                                            
+                                            <code>{item.description}</code>
+                                        </a>
+                                    </div>
+                                    <button onClick={(e) => this.removeFromCart(index, e)} className="btn btn-secondary btn-sma">Remove</button>
+                                </div>
+                            ))}
                         
-                    </div>
+                        </div>{/* col-8 */}
+                        <div class="col-4">
+                            <div>
+                                <h5>Summary</h5>
+                                <p className="cart">
+                                    {/* {console.log(this.props.domCart)} */}
+                                    {this.props.domCart.map((item) => (
+                                        <div>
+                                            <p>{item.name}</p>
+                                            <p><code>Price</code>${item.price}</p>
+                                            <p><code>Discount</code>${item.discounted_price}</p>
+                                            <hr />
+                                        </div>
+                                    ))}
+                                    {this.props.cost(total)}
+                                    <p>Total: ${total}</p>
+                                    <button onClick={(e) => this.stripeCheckout(e)} className="btn btn-secondary btn-sma">Buy Now</button>
+                                    
+                                </p>
+                            </div>
+                        </div>{/* col-4 */}
+                    </div>{/*row */}
+
                 </div>
             </div>
-        );
-    }
-
-    handleIncrement = () => {
-        console.log("Increment Clicked", this)
-        this.setState({
-            count: this.state.count + 1
-        })
-    }
-
-    handleDecrement = () => {
-        console.log("Decrement Clicked", this)
-        this.setState({
-            count: this.state.count - 1
-        })
+            </React.Fragment>
+            
+        )
+        
     }
 
     getBadgeClasses() {
         let classes = "badge m-2 badge-";
-        return classes += (this.state.count === 0) ? "warning" : "primary";
+        return classes += (this.props.count === 0) ? "warning" : "primary";
     }
 }
 
-export default CartTest;
+export default Cart;

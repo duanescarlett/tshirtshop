@@ -1,20 +1,7 @@
 import React, {Component} from 'react'
-import ShirtService from "../ShirtService";
+import ShirtService from "../ShirtService"
 
 class Home extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            loading: this.props.loading,
-            cart: false,
-            itemId: this.props.itemId,
-            errorMessage: undefined,
-            shirt: [],
-            products: [],
-            filterdProducts: []
-        };
-    }
     
     getCreatedDateString = createdTimestamp => {
         return new Date(createdTimestamp).toLocaleDateString("en-US", {
@@ -22,49 +9,37 @@ class Home extends Component {
             month: "short",
             year: "numeric"
         });
-    };
-
-    loadedShirt = response => {
-    // this.setState({loading: false, shirt: response.data});
-    // console.log("This ran!!.........");
-        if (response.status === 200) {
-            this.setState({ loading: false, shirt: response.data });
-            console.log("This ran!!.........");
-        } 
-        else {
-            this.setState({
-            loading: false,
-            errorMessage: "There was an error loading your account."
-            });
-        }
-    };
-
-    errorLoading = err => {
-        this.setState({
-            loading: false,
-            errorMessage: "There was an error loading your account."
-        });
-    };
-
-    componentDidMount() {
-        ShirtService.getShirts(this.loadedShirt, this.errorLoading);
     }
 
-    trigger(id){
-        // this.setState({
-        //     itemId: id
-        // });
+    componentDidMount() {
+        if(this.props.loading !== false){
+            ShirtService.getShirts(this.props.loadedShirt, this.props.errorLoading)
+        }
+    }
+
+    addToCart = (item, e) => {
+        e.preventDefault()
+        // console.log("Added " + item.name + " to the cart")
+        let items = this.props.cartAdder(item)
+        console.log("Cart Stuff: =>  " + items[0].image)
+    }
+
+    buyNow = (item, e) => {
+        e.preventDefault()
+        this.props.cartAdder(item)
+        this.props.pageChange("cart")
     }
 
     render() {
         return (
+            <React.Fragment>
             <div className="h-100 d-flex align-items-center justify-content-center">
-                <div class="container">
-                    <div class="row">
-                    {this.state.shirt.map((item, key) => (
-                        <div class="col-sm" key={item.product_id}>
-                            <a href={"/cart/" + item.product_id}>
-                            
+                <div className="container">
+                    <div className="row">
+                    {this.props.shirt.map( (item, index) => (
+                        <div className="col-sm" key={item.product_id}>
+                            <a href="*">
+                    
                             <img
                                 src={
                                 "https://raw.githubusercontent.com/zandoan/turing-fullstack/master/Images/product_images/" +
@@ -74,18 +49,24 @@ class Home extends Component {
                                 width="100"
                                 height="100"
                             />
+                            
+                            </a>
                             <h6>{item.name}</h6>
                             <p>{item.price}</p>
                             <code>{item.description}</code>
-                            </a>
+                            
+                            <button onClick={(e) => this.addToCart(item, e)} className="btn btn-secondary btn-sm">Add To Cart</button>
+                            <a className="btn btn-primary btn-sm" onClick={(e) => this.buyNow(item, e)} href={"cart/" + item.product_id} role="button">Buy Now</a>
                         </div>
-                        ))}
+                    ))}
+                        
                     </div>
                 </div>
             </div>
+            </React.Fragment>
         );
     }
 
 }
 
-export default Home;
+export default Home

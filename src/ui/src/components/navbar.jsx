@@ -1,33 +1,42 @@
-// import React, { Component } from 'react'
-import React from 'react';
-import { NavLink } from 'react-router-dom'
+import React, { Component } from 'react'
 
-export default function Navbar(props){
-    return ( 
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <div className="navbar-brand">
-                <img alt="" src="https://raw.githubusercontent.com/zandoan/turing-fullstack/master/Images/images/tshirtshop.png" />                    
-            </div>
-            <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul className="navbar-nav mr-auto">
-                    <li className="nav-item active">
-                        <NavLink to="/" exact="true" className="nav-link">Home</NavLink>
-                    </li>
-                    <li className="nav-item active">
-                        <NavLink to="/about" exact="true" className="nav-link">About</NavLink>
-                    </li>
-                    <li className="nav-item active">
-                        <NavLink to="/cart" exact="true" className="nav-link">Shop</NavLink>
-                    </li>
-                </ul>
-                <ul className="nav navbar-nav navbar-right">
-                    <li className="nav-item active">
-                        {/* {AuthStore.isLoggedIn() && logout} */}
-                    </li>
-                </ul>
+class Navbar extends Component {
 
-            </div>
-        </nav>
-    );
+    pager = (item, e) => {
+        e.preventDefault()
+        // console.log("Added " + item.name + " to the cart")
+        this.props.pageChange(item)
+    }
+
+    render(){
+
+        return ( 
+            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                <div className="navbar-brand">
+                    <img alt="" src="https://raw.githubusercontent.com/zandoan/turing-fullstack/master/Images/images/tshirtshop.png" />                    
+                </div>
+                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul className="navbar-nav mr-auto">
+                        <li className="nav-item active">
+                            <a href="/" onClick={(e) => this.pager("home", e)}>Home</a>
+                        </li>
+                        <li className="nav-item active">
+                            <a href="/about" onClick={(e) => this.pager("about", e)}>About</a>
+                        </li>
+                        <li className="nav-item active">
+                            <a href="/cart" onClick={(e) => this.pager("cart", e)}>Shop</a>
+                        </li>
+                    </ul>
+                    <ul className="nav navbar-nav navbar-right">
+                        <li className="nav-item active">
+                            {/* {AuthStore.isLoggedIn() && logout} */}
+                        </li>
+                    </ul>
+
+                </div>
+            </nav>
+        )
+    }
 }
 
+export default Navbar

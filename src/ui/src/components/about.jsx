@@ -4,11 +4,6 @@ import UserService from "../UserService";
 
 class About extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {loading: true, errorMessage: undefined}
-    }
-
     getCreatedDateString = (createdTimestamp) => {
         return new Date(createdTimestamp).toLocaleDateString('en-US', {
             day: 'numeric',
@@ -17,29 +12,17 @@ class About extends Component {
         });
     };
 
-    loadedUser = (response) => {
-        if (response.status === 200) {
-            this.setState({loading: false, user: response.data});
-        } else {
-            this.setState({loading: false, errorMessage: 'There was an error loading your account.'});
-        }
-    };
-
-    errorLoading = (err) => {
-        this.setState({loading: false, errorMessage: 'There was an error loading your account.'});
-    };
-
     componentDidMount() {
-        UserService.loadCurrentUser(this.loadedUser, this.errorLoading);
+        UserService.loadCurrentUser(this.props.loadedUser, this.props.errorLoading);
     }
 
     render() {
-        if (this.state.loading) {
+        if (this.props.loading) {
             return (<div className="d-flex align-items-center justify-content-center overlay">
                 <div className="spinner-border text-primary" role="status"/>
             </div>);
         } else {
-            return this.state.errorMessage ?
+            return this.props.errorMessage ?
                 <div
                     className="h-100 d-flex align-items-center justify-content-center text-danger">{this.state.errorMessage}</div> :
                 <div className="h-100 d-flex align-items-center justify-content-center">
