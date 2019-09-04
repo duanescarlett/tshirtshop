@@ -6,19 +6,19 @@ class UserService {
         axios.post('/users/login', {
             username: username,
             password: password
-        }).then(successCallback).catch(errorCallback);
+        }).then(successCallback).catch(errorCallback)
     }
 
-    static createAccount(username, password, successCallback, errorCallback) {
+    static createAccount(email, password, successCallback, errorCallback) {
         axios.post('/users', {
-            username: username,
+            email: email,
             password: password
-        }).then(successCallback).catch(errorCallback);
+        }).then(successCallback).catch(errorCallback)
     }
 
     static loadCurrentUser(successCallback, errorCallback) {
-        axios.get('/users/me').then(successCallback).catch(errorCallback);
+        axios.get('/users/me').then(successCallback).catch(errorCallback)
     }
 }
 
-export default UserService;
+export default UserService

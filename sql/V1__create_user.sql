@@ -121,7 +121,7 @@ CREATE TABLE `shipping_region` (
 CREATE TABLE `customer` (
   `id`        INT(11)           NOT NULL AUTO_INCREMENT,
   `name`               VARCHAR(50),
-  `username`           VARCHAR(50)  NOT NULL,
+  `email`              VARCHAR(50)  NOT NULL,
   `password`           TEXT  NOT NULL,
   `credit_card`        VARCHAR(50),
   `address_1`          VARCHAR(100),
@@ -137,7 +137,7 @@ CREATE TABLE `customer` (
   `created_at`         datetime NOT NULL,
   `updated_at`         datetime NOT NULL,
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `idx_customer_username` (`username`),
+  UNIQUE KEY `idx_customer_email` (`email`),
   KEY `idx_customer_shipping_region_id` (`shipping_region_id`)
 );
 

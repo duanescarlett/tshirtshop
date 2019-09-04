@@ -3,7 +3,7 @@ import React, {Component} from 'react'
 class Cart extends Component {
 
     constructor(props) {
-        super(props);
+        super(props)
 
         this.styles = {
             fontWeight: 'bold',
@@ -14,15 +14,6 @@ class Cart extends Component {
 
         this.checkout = false
     }
-
-    // price = {
-    //     price: 0
-    // }
-
-    // price = p => {
-
-    // }
-
 
     formatCount(){
         const { count } = this.state
@@ -42,27 +33,10 @@ class Cart extends Component {
         })
     }
 
-    removeFromCart = (i, e) => {
-        e.preventDefault()
-        this.props.domCart.pop(i)
-        console.log("Removed from cart " + this.props.domCart.cart)
-        this.props.pageChange("cart")
-    }
-
-    // cost = (amt) => {
-    //     this.props.cost(amt)
-    //     console.log("This is the total cost: => " + this.props.costAmt)
-    //     // this.props.pageChange("cart")
-    // }
-
     stripeCheckout = (e) => {
         // e.stopPropagation()
         e.preventDefault()
         this.props.pageChange("checkout")
-    }
-
-    componentDidMount() {
-        // console.log("this is the cart " + JSON.stringify(this.props.domCart))
     }
 
     render() {
@@ -102,7 +76,7 @@ class Cart extends Component {
                                             <code>{item.description}</code>
                                         </a>
                                     </div>
-                                    <button onClick={(e) => this.removeFromCart(index, e)} className="btn btn-secondary btn-sma">Remove</button>
+                                    <button onClick={(e) => this.props.removeFromCart(index, e)} className="btn btn-secondary btn-sma">Remove</button>
                                 </div>
                             ))}
                         
@@ -141,6 +115,7 @@ class Cart extends Component {
         let classes = "badge m-2 badge-";
         return classes += (this.props.count === 0) ? "warning" : "primary";
     }
+
 }
 
 export default Cart;

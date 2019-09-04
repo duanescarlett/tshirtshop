@@ -16,13 +16,9 @@ router.get('/', (req, res, next) => {
             'price',
             'discounted_price',
             'description'
-        ],
-        limit: 100
+        ]
     }).then(shirt => {
-        // console.log(shirt);
-        // res.json(shirt);
         res.json(shirt)
-        // res.send(shirt)
     }).catch(err => next(err));
 });
 

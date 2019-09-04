@@ -3,6 +3,11 @@ import ShirtService from "../ShirtService"
 
 class Home extends Component {
     
+    constructor(props) {
+        super(props)
+        this.display = []
+    }
+
     getCreatedDateString = createdTimestamp => {
         return new Date(createdTimestamp).toLocaleDateString("en-US", {
             day: "numeric",
@@ -11,7 +16,7 @@ class Home extends Component {
         });
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         if(this.props.loading !== false){
             ShirtService.getShirts(this.props.loadedShirt, this.props.errorLoading)
         }
@@ -19,7 +24,6 @@ class Home extends Component {
 
     addToCart = (item, e) => {
         e.preventDefault()
-        // console.log("Added " + item.name + " to the cart")
         let items = this.props.cartAdder(item)
         console.log("Cart Stuff: =>  " + items[0].image)
     }
@@ -30,16 +34,68 @@ class Home extends Component {
         this.props.pageChange("cart")
     }
 
+    pageCount = count => {
+        this.props.getPageCount(count + 1, 20)
+    }
+
+    handleSubmit = (e) => {
+        e.preventDefault()
+        this.props.shirt.map((item) => (
+            item.name === this.props.text ? this.props.searchAdder(item): null
+        ))
+        this.props.pageChange("searched")
+    }
+
+    shirtDisplay = () => {
+        let add = this.props.arrayIndexCount + 10
+        this.display = this.props.shirt.slice(this.props.arrayIndexCount, add)
+    }
+
     render() {
+        this.shirtDisplay()
+        this.pageCount(this.props.shirt.length)
+        const { loading } = this.props.state
+        const showPrevLink = 1 <= this.props.currentPageNo
+        const showNextLink = this.props.totalPages > this.props.currentPageNo
+        console.log("Total Pages: " + this.props.totalPages)
+        console.log("Current Page: " + this.props.currentPageNo)
+        console.log("This array index count: " + this.props.arrayIndexCount)
+        console.log("Total Results: " + this.props.totalResults)
+        console.log("This is the length of the array: " + this.props.shirt.length)
+        
         return (
+            
             <React.Fragment>
             <div className="h-100 d-flex align-items-center justify-content-center">
+                
                 <div className="container">
+                    <form>
+                        <div className="form-group">
+
+                            <input type="text" value={this.props.text} onChange={(e) => this.props.onTextChanged(e)} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Search Shirts by name" />
+                            {!this.props.isHidden? " " : this.props.text}
+                            <ul>
+                                {this.props.suggestions.map((s, key) => (
+                                    <li onClick={() => this.props.suggestionSelected(s)} className="list-style" key={key}>{s}</li>
+                                ))}
+                            </ul>
+                            <button onClick={(e) => this.handleSubmit(e)}>Search</button>
+                        </div>
+                    </form>
                     <div className="row">
-                    {this.props.shirt.map( (item, index) => (
-                        <div className="col-sm" key={item.product_id}>
-                            <a href="*">
+
+                        {/* <div>
+                            {this.display.map((item, index) => (
+                                item.name + " " + index
+                            ))}
+                        </div> */}
                     
+                    {/* {this.props.shirt.map((item, i) => ( */}
+                    {this.display.map((item, i) => (
+                        <div className="col-sm shirt_qube" key={item.product_id}>
+                            <a href="*">
+                            {/* {this.count = i} */}
+                            
                             <img
                                 src={
                                 "https://raw.githubusercontent.com/zandoan/turing-fullstack/master/Images/product_images/" +
@@ -53,16 +109,29 @@ class Home extends Component {
                             </a>
                             <h6>{item.name}</h6>
                             <p>{item.price}</p>
-                            <code>{item.description}</code>
                             
                             <button onClick={(e) => this.addToCart(item, e)} className="btn btn-secondary btn-sm">Add To Cart</button>
                             <a className="btn btn-primary btn-sm" onClick={(e) => this.buyNow(item, e)} href={"cart/" + item.product_id} role="button">Buy Now</a>
                         </div>
                     ))}
-                        
+                    
+                        <div className="nav-link-container">
+                            <a 
+                            href="/" 
+                            className={`nav-link ${ showPrevLink ? 'show' : 'hide'} ${ loading ? 'greyed-out' : ''}`}
+                            onClick={(e) => this.props.handlePageClick('prev', e)}>Prev
+                            </a>
+
+                            <a 
+                            href="/" 
+                            className={`nav-link ${ showNextLink ? 'show' : 'hide'} ${ loading ? 'greyed-out' : ''}`}
+                            onClick={(e) => this.props.handlePageClick('next', e)}>Next
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
+
             </React.Fragment>
         );
     }

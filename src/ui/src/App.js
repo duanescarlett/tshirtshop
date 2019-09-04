@@ -3,6 +3,8 @@ import Home from './components/home'
 import Cart from './components/cart'
 import Checkout from './components/checkout'
 import Navbar from './components/navbar'
+import Searched from './components/searched'
+import CreateAccount from './CreateAccount'
 
 
 class App extends Component {
@@ -14,10 +16,16 @@ class App extends Component {
         this.handleIncrement = this.handleIncrement.bind(this)
         this.formatCount = this.formatCount.bind(this)
         this.cartAdder = this.cartAdder.bind(this)
+        this.searchAdder = this.searchAdder.bind(this)
         this.pageChange = this.pageChange.bind(this)
-        // this.cartCost = this.cartCost.bind(this)
         this.cost = this.cost.bind(this)
-        // this.removeFromCart = this.removeFromCart.bind(this)
+        this.toggleIsHidden = this.toggleIsHidden.bind(this)
+        this.onTextChanged = this.onTextChanged.bind(this)
+        this.suggestionSelected = this.suggestionSelected.bind(this)
+        this.removeFromCart = this.removeFromCart.bind(this)
+        this.getPageCount = this.getPageCount.bind(this)
+        this.handlePageClick = this.handlePageClick.bind(this)
+        this.onTextChangeCA = this.onTextChangeCA.bind(this)
         this.state = {
             loading: true,
             itemId: 0,
@@ -25,17 +33,129 @@ class App extends Component {
             shirt: [],
             products: [],
             cart: [],
-            page: "home"
+            page: 'home',
+            search: '',
+            isHidden: false,
+            suggestions: [],
+            text: '',
+            currentPageNo: 0,
+            totalPages: 0,
+            logged_in: false,
+            email: '',
+            password: '',
+            confirmPassword: '',
+            accountCreated: false
         }
+        this.items = []
+        this.list = []
         this.stateObj = []
+        this.search = []
         this.costAmt = 0
+        this.totalResults = 0
+        this.totalPages = 0
+        this.currentPageNo = 0 
+        this.arrayIndexCount = 0
+    }
+
+    getPageCount = (total, denominator) => {
+        const divisible = 0 === total % denominator
+        const valueToBeAdded = divisible ? 0 : 1
+        // this.setState(() => ({
+        //     totalPages: Math.floor(total / denominator) + valueToBeAdded
+        // }))
+        this.totalPages = Math.floor(total / denominator) + valueToBeAdded
+    }
+
+    handlePageClick = (type, e) => {
+        e.preventDefault()
+        const updatePage = 'prev' === type 
+        ? this.currentPageNo - 1
+        : this.currentPageNo + 1 
+
+        if(type === 'prev'){
+            if(!this.currentPageNo < 1){
+                this.arrayIndexCount = this.arrayIndexCount - 10
+            }
+        }
+        else {
+            let add = this.totalPages + 1
+            if(this.currentPageNo < add){
+                this.arrayIndexCount = this.arrayIndexCount + 10
+            }
+        } 
+        this.currentPageNo = updatePage
+
+        this.setState(() => ({
+            currentPageNo: updatePage,
+            loading: true
+        }))
+
+    }
+
+    toggleIsHidden = e => {
+        e.stopPropagation()
+        e.preventDefault()
+        this.setState((currentState) => ({
+            isHidden: !currentState.isHidden,
+        }))
+    }
+
+    onTextChangeCA = e => {
+        e.preventDefault()
+        console.log("Event: " + e.target.id)
+        this.setState({
+            [e.target.id]: e.target.value
+        })
+    }
+
+    onTextChanged = (e) => {
+        e.stopPropagation()
+        e.preventDefault()
+        const value = e.target.value
+        // let suggestions = []
+        this.state.shirt.map((i) => (
+            this.items.push(i.name)
+        ))
+
+        // console.log(this.items)
+        if(value.length === 0) {
+            this.setState(() => ({
+                suggestions: []
+            }))
+            this.items = []
+        }
+        else {
+            // Add the value to the suggestions state if the 
+            // words that start with the value in focus
+            this.items.map((item, index) => (
+                item.startsWith(value) || item.startsWith(value.toUpperCase())? 
+                    value !== item? 
+                        this.setState(() => ({
+                            suggestions: this.state.suggestions.concat(item)
+                        })) 
+                    : null
+                : null
+            ))
+
+            // const regex = new RegExp(`^${value}`, 'i')
+            // suggestions = this.items.sort().filter(() => regex.test(value))
+            // this.setState(() => ({suggestions}))
+
+        }
+        
+    }
+
+    suggestionSelected = value => {
+        this.setState(() => ({
+            text: value,
+            suggestions: []
+        }))
     }
 
     cost = amt => {
         console.log("This is the amount on the app.js before added to costAmt => " + amt)
         this.costAmt += amt
         console.log("This is the total cost on app.js => " + this.costAmt)
-        // this.pageChange("cart")
     }
 
     cartAdder = item => {
@@ -43,9 +163,17 @@ class App extends Component {
         return this.stateObj.cart
     }
 
-    // cartCost = price => {
-    //     this.stateObj.cost = price
-    // }
+    searchAdder = item => {
+        this.search.push(item)
+        return this.search
+    }
+
+    removeFromCart = (i, e) => {
+        e.preventDefault()
+        this.stateObj.cart.pop(i)
+        console.log("Removed from cart " + this.stateObj.cart)
+        this.pageChange("cart")
+    }
 
     loadedShirt = res => {
         if (res.status === 200) {
@@ -83,14 +211,10 @@ class App extends Component {
     }
 
     pageChange = page => {
-        this.setState({ page: page })
+        this.setState(() => ({
+            page: page 
+        }))
     }
-
-    // removeFromCart = i => {
-    //     this.stateObj.cart.pop(i)
-    //     console.log("Removed from cart " + this.stateObj.cart)
-    //     this.pageChange("cart")
-    // }
 
     componentDidMount() {
         this.stateObj = this.state
@@ -101,7 +225,7 @@ class App extends Component {
             <div className='page-container'>
                 
                 <Navbar pageChange={this.pageChange} />
-                {this.state.page === "home" ?
+                {this.state.page === "home" && this.state.logged_in === true ?
                     <Home 
                         loading={this.state.loading} 
                         itemId={this.state.itemId} 
@@ -111,8 +235,27 @@ class App extends Component {
                         loadedShirt={this.loadedShirt}
                         errorLoading={this.errorLoading}
                         cartAdder={this.cartAdder}
+                        searchAdder={this.searchAdder}
                         pageChange={this.pageChange}
-                    /> : null 
+                        text={this.state.text}
+                        isHidden={this.state.isHidden}
+                        toggleIsHidden={this.toggleIsHidden}
+                        onTextChanged={this.onTextChanged}
+                        suggestionSelected={this.suggestionSelected}
+                        suggestions={this.state.suggestions}
+                        list={this.state.list}
+                        state={this.state}
+                        stateObj={this.stateObj}
+                        getPageCount={this.getPageCount}
+                        handlePageClick={this.handlePageClick}
+                        totalResults={this.totalResults}
+                        totalPages={this.totalPages}
+                        currentPageNo={this.currentPageNo}
+                        arrayIndexCount={this.arrayIndexCount}
+                    /> : <CreateAccount 
+                            state={this.state} 
+                            onTextChangeCA={this.onTextChangeCA}
+                        /> 
                 }
 
                 {this.state.page === "cart" ? 
@@ -132,6 +275,29 @@ class App extends Component {
                         costAmt={this.costAmt}
                         pageChange={this.pageChange}
                         removeFromCart={this.removeFromCart}
+                        clearCart={this.clearCart}
+                    /> : null
+                }
+
+                {this.state.page === "searched" ? 
+                    <Searched
+                        loading={this.state.loading} 
+                        itemId={this.state.itemId} 
+                        shirt={this.state.shirt} 
+                        cart={this.state.cart}
+                        errorMessage={this.state.errorMessage}
+                        errorLoading={this.errorLoading}
+                        handleIncrement={this.handleIncrement}
+                        handleDecrement={this.handleDecrement}
+                        formatCount={this.formatCount}
+                        params={this.state}
+                        domCart={this.stateObj.cart}
+                        searched={this.search}
+                        cost={this.cost}
+                        costAmt={this.costAmt}
+                        pageChange={this.pageChange}
+                        removeFromCart={this.removeFromCart}
+                        clearCart={this.clearCart}
                     /> : null
                 }
 
@@ -149,10 +315,14 @@ class App extends Component {
                         pageChange={this.pageChange}
                     /> : null
                 }
+
+                {this.state.page === "createaccount" ?
+                    <CreateAccount state={this.state} /> : null
+                }
             
             </div>
         )
     }
 }
 
-export default App;
+export default App
