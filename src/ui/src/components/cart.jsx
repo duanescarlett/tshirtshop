@@ -34,9 +34,16 @@ class Cart extends Component {
     }
 
     stripeCheckout = (e) => {
-        // e.stopPropagation()
         e.preventDefault()
-        this.props.pageChange("checkout")
+        // this.props.pageChange("checkout")
+        // const { logged_in } = this.props.state
+        if(this.props.auth === false){
+            this.props.refPage("cart")
+            this.props.pageChange("login")
+        }
+        else {
+            this.props.pageChange("checkout")
+        }
     }
 
     render() {
@@ -57,7 +64,7 @@ class Cart extends Component {
                     <div className="row">
                         <div className="col-8">
                             {this.props.domCart.map((item, index) => (
-                                <div className="itemRow">
+                                <div className="itemRow" key={item.product_id}>
                                     <div className="col-sm" key={item.product_id}>
                                         <a href={"/cart/" + item.product_id}>
                                             <img
@@ -87,7 +94,7 @@ class Cart extends Component {
                                 <p className="cart">
                                     {/* {console.log(this.props.domCart)} */}
                                     {this.props.domCart.map((item) => (
-                                        <div>
+                                        <div key={item.id}>
                                             <p>{item.name}</p>
                                             <p><code>Price</code>${item.price}</p>
                                             <p><code>Discount</code>${item.discounted_price}</p>

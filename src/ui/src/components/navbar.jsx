@@ -4,8 +4,17 @@ class Navbar extends Component {
 
     pager = (item, e) => {
         e.preventDefault()
-        // console.log("Added " + item.name + " to the cart")
         this.props.pageChange(item)
+    }
+
+    auth = () => {
+        const { logged_in } = this.props.state
+        if(logged_in) {
+            return <li className="nav-item active"><a href="*" onClick={this.props.logout(false)}>Sign Out</a></li>
+        }
+        else {
+            return <div><li className="nav-item active"><a href="*" onClick={(e) => this.pager("login", e)}>Login</a></li> <li className="nav-item active"><a href="/" onClick={(e) => this.pager("createaccount", e)}>Sign Up</a></li></div>
+        }
     }
 
     render(){
@@ -28,9 +37,7 @@ class Navbar extends Component {
                         </li>
                     </ul>
                     <ul className="nav navbar-nav navbar-right">
-                        <li className="nav-item active">
-                            {/* {AuthStore.isLoggedIn() && logout} */}
-                        </li>
+                        {this.auth()}
                     </ul>
 
                 </div>

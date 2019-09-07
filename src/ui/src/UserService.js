@@ -2,9 +2,9 @@ import axios from 'axios'
 
 class UserService {
 
-    static login(username, password, successCallback, errorCallback) {
+    static login(email, password, successCallback, errorCallback) {
         axios.post('/users/login', {
-            username: username,
+            email: email,
             password: password
         }).then(successCallback).catch(errorCallback)
     }

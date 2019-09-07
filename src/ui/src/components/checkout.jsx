@@ -24,6 +24,7 @@ export default class Checkout extends React.Component {
   }
  
   handleToken(token, product) {
+  
     const response = axios.post(
       "/checkout",
       { token, product }
@@ -36,6 +37,14 @@ export default class Checkout extends React.Component {
     else {
       toast("Something went wrong", { type: "error" })
     }
+  }
+
+  componentDidMount() {
+    // const { logged_in } = this.props.state
+    // if(!logged_in){
+    //   this.props.refPage("cart")
+    //   this.props.pageChange("login")
+    // }
   }
  
   render() {

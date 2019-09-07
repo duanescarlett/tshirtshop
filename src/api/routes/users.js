@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../db/model/User');
 const Tshirt = require('../db/model/T-Shirts');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 const ValidateJWT = require('../auth/ValidateJWT');
 
 function ValidateUsernamePassword(req, res, next) {
@@ -11,7 +11,7 @@ function ValidateUsernamePassword(req, res, next) {
         // res.status(400).send({message: 'Please provide both username and password'})
         res.status(400).send({message: req.body.password})
     } else {
-        next();
+        next()
     }
 }
 
@@ -38,26 +38,28 @@ router.post('/', ValidateUsernamePassword, (req, res, next) => {
 })
 
 router.post('/login', ValidateUsernamePassword, (req, res, next) => {
-    User.findOne({where: {email: req.body.email}}).then(user => {
+    User.findOne({
+        where: {email: req.body.email}
+    })
+    .then(user => {
         if (user && bcrypt.compareSync(req.body.password, user.password)) {
-            jwt.sign({userId: user.id},
-                     ValidateJWT.TOKEN_SECRET,
-                     {expiresIn: 24 * 7 * 60 * 60},
-                (err, token) => {
-                    err ? next(err) : res.json({token: token});
-                });
+            console.log("This user was logged in")
+            return res.status(201).send({
+                message: "User logged in"
+            })
         } else {
-            res.status(400).send({message: "Invalid credentials!"});
+            console.log("This user was not logged in")
+            res.status(400).send({message: "Invalid credentials!"})
         }
-    }).catch(err => next(err));
-});
+    }).catch(err => next(err))
+})
 
 router.get('/me', ValidateJWT, (req, res, next) => {
     User.findOne({where: {id: req.userId}}).then(user => {
-        console.log("Fire ------------------------!");
-        res.json({email: user.email, createdAt: user.created_at});
-    }).catch(err => next(err));
-});
+        console.log("Fire ------------------------!")
+        res.json({email: user.email, createdAt: user.created_at})
+    }).catch(err => next(err))
+})
 
 // router.get('/shop', ValidateJWT, (req, res, next) => {
 //     // User.findOne({where: {id: req.userId}}).then(user => {
@@ -74,8 +76,8 @@ router.get('/me', ValidateJWT, (req, res, next) => {
 
 router.get('/home', ValidateJWT, (req, res, next) => {
     User.findOne({where: {id: req.userId}}).then(user => {
-        res.json({email: user.email, createdAt: user.created_at});
-    }).catch(err => next(err));
+        res.json({email: user.email, createdAt: user.created_at})
+    }).catch(err => next(err))
 });
 
 // router.get('/test', (req, res, next) => {

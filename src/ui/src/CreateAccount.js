@@ -5,21 +5,18 @@ class CreateAccount extends Component {
 
     creationError = 'Error creating account. Try again later.';
 
-    // constructor(props) {
-    //     super(props)
-    //     // const { email, password, confirmPassword, errorMessage, accountCreated, loading } = this.props.state
-    // }
-
     handleCreateResponse = (response) => {
         // this.setState({loading: false})
         if (response.status === 201) {
             // this.setState({accountCreated: true, errorMessage: undefined});
+            this.props.logged(true)
+            this.props.pageChange("home")
             console.log("Account created")
         } else {
             // this.setState({errorMessage: this.loginError});
             console.log("Account was not created")
         }
-    };
+    }
 
     handleCreateError = (e) => {
         // this.setState({loading: false})
@@ -34,7 +31,6 @@ class CreateAccount extends Component {
         if (password !== confirmPassword) {
             // this.setState({errorMessage: "Passwords do not match."})
         } else {
-            
             // this.setState({loading: true})
             UserService.createAccount(email,
                 password,
@@ -43,8 +39,13 @@ class CreateAccount extends Component {
         }
     }
 
-    render() {
+    login = e => {
+        e.preventDefault()
+        this.props.pageChange("login")
+    }
 
+    render() {
+        const loginButton = <button className="link-button" onClick={(e) => this.login(e)}>Login</button>;
         return (
             <React.Fragment>
               
@@ -82,8 +83,8 @@ class CreateAccount extends Component {
                             onClick={(e) => this.handleCreateAcc(e)}
                             >Create</button>
                         <p className="mt-3 text-center">
-                            Already have an account? 
-                            <button className="link-button">Login.</button>
+                            Already have an account? <br />
+                            <button className="link-button">{loginButton}</button>
                         </p>
                     </form>
                 </div>

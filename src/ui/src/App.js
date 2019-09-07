@@ -5,6 +5,7 @@ import Checkout from './components/checkout'
 import Navbar from './components/navbar'
 import Searched from './components/searched'
 import CreateAccount from './CreateAccount'
+import Login from './Login'
 
 
 class App extends Component {
@@ -26,6 +27,10 @@ class App extends Component {
         this.getPageCount = this.getPageCount.bind(this)
         this.handlePageClick = this.handlePageClick.bind(this)
         this.onTextChangeCA = this.onTextChangeCA.bind(this)
+        this.logged = this.logged.bind(this)
+        this.logout = this.logout.bind(this)
+        this.refPage = this.refPage.bind(this)
+        this.upDateAuth = this.upDateAuth.bind(this)
         this.state = {
             loading: true,
             itemId: 0,
@@ -44,7 +49,8 @@ class App extends Component {
             email: '',
             password: '',
             confirmPassword: '',
-            accountCreated: false
+            accountCreated: false,
+            refPage: ''
         }
         this.items = []
         this.list = []
@@ -55,14 +61,16 @@ class App extends Component {
         this.totalPages = 0
         this.currentPageNo = 0 
         this.arrayIndexCount = 0
+        this.auth = false
+    }
+
+    upDateAuth = (q) => {
+        this.auth = q
     }
 
     getPageCount = (total, denominator) => {
         const divisible = 0 === total % denominator
         const valueToBeAdded = divisible ? 0 : 1
-        // this.setState(() => ({
-        //     totalPages: Math.floor(total / denominator) + valueToBeAdded
-        // }))
         this.totalPages = Math.floor(total / denominator) + valueToBeAdded
     }
 
@@ -92,6 +100,14 @@ class App extends Component {
 
     }
 
+    logged = q => {
+        // Passed in a boolean
+        this.setState(() => ({
+            logged_in: q
+        }))
+        this.auth = q
+    }
+
     toggleIsHidden = e => {
         e.stopPropagation()
         e.preventDefault()
@@ -112,12 +128,10 @@ class App extends Component {
         e.stopPropagation()
         e.preventDefault()
         const value = e.target.value
-        // let suggestions = []
         this.state.shirt.map((i) => (
             this.items.push(i.name)
         ))
 
-        // console.log(this.items)
         if(value.length === 0) {
             this.setState(() => ({
                 suggestions: []
@@ -136,10 +150,6 @@ class App extends Component {
                     : null
                 : null
             ))
-
-            // const regex = new RegExp(`^${value}`, 'i')
-            // suggestions = this.items.sort().filter(() => regex.test(value))
-            // this.setState(() => ({suggestions}))
 
         }
         
@@ -216,6 +226,18 @@ class App extends Component {
         }))
     }
 
+    refPage = page => {
+        this.setState(() => ({
+            refPage: page
+        }))
+    }
+
+    logout = boo => {
+        this.setState(() => ({
+            logged_in: boo
+        }))
+    }
+
     componentDidMount() {
         this.stateObj = this.state
     }
@@ -224,8 +246,13 @@ class App extends Component {
         return ( 
             <div className='page-container'>
                 
-                <Navbar pageChange={this.pageChange} />
-                {this.state.page === "home" && this.state.logged_in === true ?
+                <Navbar 
+                    pageChange={this.pageChange} 
+                    logout={this.logout} 
+                    state={this.state} 
+                    />
+                    
+                {this.state.page === "home" ?
                     <Home 
                         loading={this.state.loading} 
                         itemId={this.state.itemId} 
@@ -252,14 +279,33 @@ class App extends Component {
                         totalPages={this.totalPages}
                         currentPageNo={this.currentPageNo}
                         arrayIndexCount={this.arrayIndexCount}
-                    /> : <CreateAccount 
-                            state={this.state} 
-                            onTextChangeCA={this.onTextChangeCA}
-                        /> 
+                        refPage={this.refPage}
+                    /> : null
+                }
+
+                {this.state.page === "createaccount" ?
+                    <CreateAccount 
+                        state={this.state} 
+                        onTextChangeCA={this.onTextChangeCA}
+                        logged={this.logged}
+                        pageChange={this.pageChange}
+                    /> : null
+                }
+
+                {this.state.page === "login" ?
+                    <Login
+                        state={this.state} 
+                        onTextChangeCA={this.onTextChangeCA}
+                        logged={this.logged}
+                        pageChange={this.pageChange}
+                        auth={this.auth}
+                        upDateAuth={this.upDateAuth}
+                    /> : null
                 }
 
                 {this.state.page === "cart" ? 
                     <Cart 
+                        auth={this.auth}
                         loading={this.state.loading} 
                         itemId={this.state.itemId} 
                         shirt={this.state.shirt} 
@@ -276,6 +322,8 @@ class App extends Component {
                         pageChange={this.pageChange}
                         removeFromCart={this.removeFromCart}
                         clearCart={this.clearCart}
+                        state={this.state}
+                        refPage={this.refPage}
                     /> : null
                 }
 
@@ -313,13 +361,11 @@ class App extends Component {
                         loadedShirt={this.loadedShirt}
                         errorLoading={this.errorLoading}
                         pageChange={this.pageChange}
+                        refPage={this.refPage}
+                        state={this.state}
                     /> : null
                 }
 
-                {this.state.page === "createaccount" ?
-                    <CreateAccount state={this.state} /> : null
-                }
-            
             </div>
         )
     }
