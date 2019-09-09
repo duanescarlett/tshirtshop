@@ -6,23 +6,15 @@ class Login extends Component {
 
     loginError = 'Error logging in. Try again later.'
 
-    // constructor(props) {
-    //     super(props);
-    //     this.props.pageChange(this.props.page)
-    // }
-
     handleLoginResponse = (response) => {
         const { refPage } = this.props.state
         if (response.status === 201) {
             
-            // this.props.logged(true)
-            // this.props.auth = true
+            this.props.logged(true)
             this.props.upDateAuth(true)
             console.log("Ref page: " + refPage)
             this.props.pageChange(refPage)
-            
-            // console.log("Login was a success")
-            
+
         } 
         else {
             this.setState({

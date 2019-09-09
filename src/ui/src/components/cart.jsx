@@ -35,9 +35,10 @@ class Cart extends Component {
 
     stripeCheckout = (e) => {
         e.preventDefault()
-        // this.props.pageChange("checkout")
-        // const { logged_in } = this.props.state
-        if(this.props.auth === false){
+
+        const { logged_in } = this.props.state
+
+        if(!logged_in){
             this.props.refPage("cart")
             this.props.pageChange("login")
         }
@@ -102,7 +103,7 @@ class Cart extends Component {
                                         </div>
                                     ))}
                                     {this.props.cost(total)}
-                                    <p>Total: ${total}</p>
+                                    <p>Total: ${total.toFixed(2)}</p>
                                     <button onClick={(e) => this.stripeCheckout(e)} className="btn btn-secondary btn-sma">Buy Now</button>
                                     
                                 </p>

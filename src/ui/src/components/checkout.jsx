@@ -38,21 +38,12 @@ export default class Checkout extends React.Component {
       toast("Something went wrong", { type: "error" })
     }
   }
-
-  componentDidMount() {
-    // const { logged_in } = this.props.state
-    // if(!logged_in){
-    //   this.props.refPage("cart")
-    //   this.props.pageChange("login")
-    // }
-  }
  
   render() {
     return (
       <div className="container">
         <div className="row">
           <div className="col-8">
-            {/* {this.product = this.props.domCart} */}
             {this.props.domCart.map((item) => (
               <div>
                   <img
@@ -70,7 +61,7 @@ export default class Checkout extends React.Component {
                   <hr />
               </div>
           ))}
-            <p>Total Cost is: ${this.props.costAmt}</p>
+            <p>Total Cost is: ${this.props.costAmt.toFixed(2)}</p>
           </div>{/* col-8 */}
           <div class="col-4">
             <StripeCheckout

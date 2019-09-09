@@ -54,7 +54,6 @@ class Home extends Component {
     render() {
         this.shirtDisplay()
         this.pageCount(this.props.shirt.length)
-        const { loading } = this.props.state
         const showPrevLink = 1 <= this.props.currentPageNo
         const showNextLink = this.props.totalPages > this.props.currentPageNo
         console.log("Total Pages: " + this.props.totalPages)
@@ -84,18 +83,9 @@ class Home extends Component {
                     </form>
                     <div className="row">
 
-                        {/* <div>
-                            {this.display.map((item, index) => (
-                                item.name + " " + index
-                            ))}
-                        </div> */}
-                    
-                    {/* {this.props.shirt.map((item, i) => ( */}
                     {this.display.map((item, i) => (
                         <div className="col-sm shirt_qube" key={item.product_id}>
                             <a href="*">
-                            {/* {this.count = i} */}
-                            
                             <img
                                 src={
                                 "https://raw.githubusercontent.com/zandoan/turing-fullstack/master/Images/product_images/" +
@@ -110,21 +100,21 @@ class Home extends Component {
                             <h6>{item.name}</h6>
                             <p>{item.price}</p>
                             
-                            <button onClick={(e) => this.addToCart(item, e)} className="btn btn-secondary btn-sm">Add To Cart</button>
-                            <a className="btn btn-primary btn-sm" onClick={(e) => this.buyNow(item, e)} href={"cart/" + item.product_id} role="button">Buy Now</a>
+                            <button onClick={(e) => this.addToCart(item, e)} className="btn btn-warning btn-sm">Cart</button>
+                            <a className="btn btn-primary btn-sm" onClick={(e) => this.buyNow(item, e)} href={"cart/" + item.product_id} role="button">Buy</a>
                         </div>
                     ))}
                     
                         <div className="nav-link-container">
                             <a 
                             href="/" 
-                            className={`nav-link ${ showPrevLink ? 'show' : 'hide'} ${ loading ? 'greyed-out' : ''}`}
+                            className={`nav-link ${ showPrevLink ? 'show' : 'hide'}`}
                             onClick={(e) => this.props.handlePageClick('prev', e)}>Prev
                             </a>
 
                             <a 
                             href="/" 
-                            className={`nav-link ${ showNextLink ? 'show' : 'hide'} ${ loading ? 'greyed-out' : ''}`}
+                            className={`nav-link ${ showNextLink ? 'show' : 'hide'}`}
                             onClick={(e) => this.props.handlePageClick('next', e)}>Next
                             </a>
                         </div>
@@ -133,7 +123,7 @@ class Home extends Component {
             </div>
 
             </React.Fragment>
-        );
+        )
     }
 
 }

@@ -3,6 +3,7 @@ import Home from './components/home'
 import Cart from './components/cart'
 import Checkout from './components/checkout'
 import Navbar from './components/navbar'
+import Footer from './components/footer'
 import Searched from './components/searched'
 import CreateAccount from './CreateAccount'
 import Login from './Login'
@@ -50,7 +51,7 @@ class App extends Component {
             password: '',
             confirmPassword: '',
             accountCreated: false,
-            refPage: ''
+            refPage: 'home'
         }
         this.items = []
         this.list = []
@@ -61,7 +62,6 @@ class App extends Component {
         this.totalPages = 0
         this.currentPageNo = 0 
         this.arrayIndexCount = 0
-        this.auth = false
     }
 
     upDateAuth = (q) => {
@@ -250,6 +250,9 @@ class App extends Component {
                     pageChange={this.pageChange} 
                     logout={this.logout} 
                     state={this.state} 
+                    auth={this.auth}
+                    upDateAuth={this.upDateAuth}
+                    refPage={this.refPage}
                     />
                     
                 {this.state.page === "home" ?
@@ -298,14 +301,12 @@ class App extends Component {
                         onTextChangeCA={this.onTextChangeCA}
                         logged={this.logged}
                         pageChange={this.pageChange}
-                        auth={this.auth}
                         upDateAuth={this.upDateAuth}
                     /> : null
                 }
 
                 {this.state.page === "cart" ? 
                     <Cart 
-                        auth={this.auth}
                         loading={this.state.loading} 
                         itemId={this.state.itemId} 
                         shirt={this.state.shirt} 
@@ -365,6 +366,8 @@ class App extends Component {
                         state={this.state}
                     /> : null
                 }
+
+                <Footer />
 
             </div>
         )
