@@ -3,12 +3,14 @@ const express = require('express')
 const logger = require('morgan')
 const stripe = require("stripe")("sk_test_lomdOfxbm7QDgZWvR82UhV6D")
 const uuid = require("uuid/v4")
+const cors = require("cors")
 
 const usersRouter = require('./routes/users')
 const shirtsRouter = require('./routes/shirts')
 
 const app = express()
 
+app.use(cors())
 app.use(logger('dev'))
 app.use(express.json())
 app.use(express.urlencoded({

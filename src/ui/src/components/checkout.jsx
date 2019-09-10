@@ -23,9 +23,15 @@ export default class Checkout extends React.Component {
     })
   }
  
-  handleToken(token, product) {
+  async handleToken(token) {
   
-    const response = axios.post(
+    const product = {
+      name: "Tesla Roadster",
+      price: 64998.67,
+      description: "Cool car"
+    }
+    
+    const response = await axios.post(
       "/checkout",
       { token, product }
     )
@@ -45,7 +51,7 @@ export default class Checkout extends React.Component {
         <div className="row">
           <div className="col-8">
             {this.props.domCart.map((item) => (
-              <div>
+              <div key={item.key}>
                   <img
                     src={
                     "https://raw.githubusercontent.com/zandoan/turing-fullstack/master/Images/product_images/" +
@@ -70,6 +76,7 @@ export default class Checkout extends React.Component {
               // stripeKey="sk_test_lomdOfxbm7QDgZWvR82UhV6D"
               amount={this.props.costAmt * 100}
               currency={"USD"}
+              product={this.props.domCart}
               metadata={{order_id: Math.random() * 1239}}
             />
           </div>{/* col-4 */}
