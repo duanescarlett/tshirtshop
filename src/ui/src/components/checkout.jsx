@@ -31,18 +31,27 @@ export default class Checkout extends React.Component {
       description: "Cool car"
     }
     
-    const response = await axios.post(
-      "/checkout",
+    // const response = await axios.post(
+    await axios.post(
+      'checkout',
       { token, product }
     )
-    const { status } = response.data
-    console.log("Response:", response.data)
-    if (status === "success") {
+    .then(res => {
+      console.log("Post to API worked!!")
+    })
+    .catch(e => {
+      console.log(e.message + " and this happened")
+    })
+
+    // const { status } = response.data
+    // console.log("Response:", response.data)
+    // if (status === "success") {
       toast("Success! Check email for details", { type: "success" })
-    } 
-    else {
-      toast("Something went wrong", { type: "error" })
-    }
+    // } 
+    // else {
+    //   toast("Something went wrong", { type: "error" })
+    // }
+    
   }
  
   render() {

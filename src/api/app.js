@@ -1,18 +1,19 @@
+const cors = require('cors')
 const createError = require('http-errors')
 const express = require('express')
 const logger = require('morgan')
-const stripe = require("stripe")("sk_test_lomdOfxbm7QDgZWvR82UhV6D")
+const stripe = require("stripe")("sk_test_HHnoTIRMP37ES5aSUc15vz4B00jhibOxbQ")
 const uuid = require("uuid/v4")
-const cors = require("cors")
 
 const usersRouter = require('./routes/users')
 const shirtsRouter = require('./routes/shirts')
 
 const app = express()
 
+app.use(express.json())
 app.use(cors())
 app.use(logger('dev'))
-app.use(express.json())
+
 app.use(express.urlencoded({
     extended: false
 }))
@@ -35,14 +36,14 @@ app.use(function (err, req, res, next) {
     })
 })
 
-app.post("/checkout", async (req, res) => {
+app.post('/checkout', async (req, res) => {
     console.log("Request:", req.body)
   
     let error
     let status
 
     try {
-        const { product, token } = req.body
+        const { token, product } = req.body
     
         const customer = await stripe.customers.create({
             email: token.email,

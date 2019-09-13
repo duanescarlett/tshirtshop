@@ -1,5 +1,4 @@
-import React, {Component} from 'react';
-import UserService from "../UserService";
+import React, {Component} from 'react'
 
 
 class About extends Component {
