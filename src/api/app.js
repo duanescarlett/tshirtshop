@@ -2,7 +2,7 @@ const cors = require('cors')
 const createError = require('http-errors')
 const express = require('express')
 const logger = require('morgan')
-const stripe = require("stripe")("sk_test_HHnoTIRMP37ES5aSUc15vz4B00jhibOxbQ")
+const stripe = require("stripe")("sk_test_lomdOfxbm7QDgZWvR82UhV6D")
 const uuid = require("uuid/v4")
 
 const usersRouter = require('./routes/users')

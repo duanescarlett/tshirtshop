@@ -13,7 +13,7 @@ class Home extends Component {
             day: "numeric",
             month: "short",
             year: "numeric"
-        });
+        })
     }
 
     componentDidMount = () => {
@@ -22,22 +22,26 @@ class Home extends Component {
         }
     }
 
+    // This adds items to the cart
     addToCart = (item, e) => {
         e.preventDefault()
         let items = this.props.cartAdder(item)
         console.log("Cart Stuff: =>  " + items[0].image)
     }
 
+    // This handles the event from the buy button
     buyNow = (item, e) => {
         e.preventDefault()
         this.props.cartAdder(item)
         this.props.pageChange("cart")
     }
 
+    // This calculates the amount of pages needed for pagination
     pageCount = count => {
         this.props.getPageCount(count + 1, 20)
     }
 
+    // This handles the event for the search engine
     handleSubmit = (e) => {
         e.preventDefault()
         this.props.shirt.map((item) => (
@@ -46,6 +50,7 @@ class Home extends Component {
         this.props.pageChange("searched")
     }
 
+    // Get the data for the products from the API
     shirtDisplay = () => {
         let add = this.props.arrayIndexCount + 10
         this.display = this.props.shirt.slice(this.props.arrayIndexCount, add)

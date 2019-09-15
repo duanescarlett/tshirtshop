@@ -21,7 +21,6 @@ class App extends Component {
         this.searchAdder = this.searchAdder.bind(this)
         this.pageChange = this.pageChange.bind(this)
         this.cost = this.cost.bind(this)
-        this.toggleIsHidden = this.toggleIsHidden.bind(this)
         this.onTextChanged = this.onTextChanged.bind(this)
         this.suggestionSelected = this.suggestionSelected.bind(this)
         this.removeFromCart = this.removeFromCart.bind(this)
@@ -68,12 +67,14 @@ class App extends Component {
         this.auth = q
     }
 
+    // This determins the amount of pages to created
     getPageCount = (total, denominator) => {
         const divisible = 0 === total % denominator
         const valueToBeAdded = divisible ? 0 : 1
         this.totalPages = Math.floor(total / denominator) + valueToBeAdded
     }
 
+    // This is the event handler for the pagination buttons
     handlePageClick = (type, e) => {
         e.preventDefault()
         const updatePage = 'prev' === type 
@@ -100,20 +101,13 @@ class App extends Component {
 
     }
 
+    // This logs the user in or out
     logged = q => {
         // Passed in a boolean
         this.setState(() => ({
             logged_in: q
         }))
         this.auth = q
-    }
-
-    toggleIsHidden = e => {
-        e.stopPropagation()
-        e.preventDefault()
-        this.setState((currentState) => ({
-            isHidden: !currentState.isHidden,
-        }))
     }
 
     onTextChangeCA = e => {
@@ -163,21 +157,22 @@ class App extends Component {
     }
 
     cost = amt => {
-        console.log("This is the amount on the app.js before added to costAmt => " + amt)
-        this.costAmt += amt
-        console.log("This is the total cost on app.js => " + this.costAmt)
+        this.costAmt += amt        
     }
 
+    // Adds an item to the cart
     cartAdder = item => {
         this.stateObj.cart.push(item)
         return this.stateObj.cart
     }
 
+    // Adds a selection to the search from the autocomplete
     searchAdder = item => {
         this.search.push(item)
         return this.search
     }
 
+    // Remove a single item from the cart
     removeFromCart = (i, e) => {
         e.preventDefault()
         this.stateObj.cart.pop(i)
@@ -220,12 +215,14 @@ class App extends Component {
         return count === 0 ? "Zero" : count;
     }
 
+    // This changes the page
     pageChange = page => {
         this.setState(() => ({
             page: page 
         }))
     }
 
+    // This adds the page that you are coming from to the state
     refPage = page => {
         this.setState(() => ({
             refPage: page
@@ -347,6 +344,9 @@ class App extends Component {
                         pageChange={this.pageChange}
                         removeFromCart={this.removeFromCart}
                         clearCart={this.clearCart}
+                        cartAdder={this.cartAdder}
+                        state={this.state}
+                        refPage={this.refPage}
                     /> : null
                 }
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 
 class Navbar extends Component {
 
+    // This changes the view
     pager = (item, e) => {
         e.preventDefault()
         const { refPage } = this.props.state
@@ -9,6 +10,7 @@ class Navbar extends Component {
         this.props.pageChange(item)
     }
 
+    // This test if the user is logged in and displays the apporiate link
     auth = () => {
         const { email, logged_in } = this.props.state
         if(logged_in) {

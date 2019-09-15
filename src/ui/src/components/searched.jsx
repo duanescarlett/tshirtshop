@@ -32,17 +32,25 @@ class Searched extends Component {
     })
   }
 
-  stripeCheckout = e => {
-    // e.stopPropagation()
-    e.preventDefault();
-    this.props.pageChange("checkout")
+  stripeCheckout = (e) => {
+    e.preventDefault()
+
+    const { logged_in } = this.props.state
+
+    if(!logged_in){
+      // Let the state know where you are coming from
+      this.props.refPage("searched")
+      this.props.pageChange("login")
+    }
+    else {
+      // This adds the item that was searched to the cart
+      this.props.cartAdder(this.props.searched)
+      this.props.pageChange("checkout")
+    }
   }
 
   componentDidMount() {
-    // this.searched = this.props.shirt.map((item) => {
-    //   return item.name === this.props.text ? item : false
-    // })
-
+    // This finds the items that was searched for
     for(var i = 0; i < this.props.shirt.length; i++){
       if(this.props.shirt[i].name.startsWith(this.props.text)){
         this.searched = this.props.shirt[i]
@@ -57,9 +65,7 @@ class Searched extends Component {
       <React.Fragment>
         <div>
           {console.log("The Search " + this.props.searched)}
-          {ar.forEach(function(val, i, a) {
-            // console.log(val, i, a)
-            console.log(val);
+          {ar.forEach(function(val) {
             total += parseFloat(val.price) - parseFloat(val.discounted_price);
           })}
         </div>
@@ -119,7 +125,7 @@ class Searched extends Component {
                         : null
                     ))}
                     {this.props.cost(total)}
-                    <p>Total: ${total}</p>
+                    <p>Total: ${total.toFixed(2)}</p>
                     <button
                       onClick={e => this.stripeCheckout(e)}
                       className="btn btn-secondary btn-sma"
