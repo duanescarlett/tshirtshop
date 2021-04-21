@@ -9,7 +9,7 @@
     "react-scripts": "3.0.1",
     "axios": "0.18.1",
     "react-router-dom": "4.3.1",
-    "sockjs": "0.3.19",
+    "sockjs": "0.3.20",
     "stripe": "7.5.0",
     "react-stripe-checkout": "2.6.3",
     "redux": "4.0.4",
